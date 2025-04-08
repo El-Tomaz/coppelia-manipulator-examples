@@ -6,10 +6,17 @@ from numpy import deg2rad, cos, sin, arccos,arctan2, rad2deg, pi
 def ik(x, y, o):
     l1 = 21e-2
     l2 = 22.33e-2
-    l3 = 3e-2
+    l3 = 9e-2
 
-    x2 = x - l3*cos(o)
-    y2 = y - l3*sin(o)
+    
+    xj1 = 0 #offset of j1 to base
+    yj1 = 0.1829 #offset of j1 to base
+    
+    x_target = x - xj1
+    y_target = y - yj1
+    
+    x2 = x_target - l3*cos(o)
+    y2 = y_target - l3*sin(o)
 
     print(f"{x2} \t {y2}")
 
@@ -25,7 +32,7 @@ def ik(x, y, o):
     print(f"{rad2deg(q1)}° \t {rad2deg(q2)}° \t {rad2deg(q3)}°")
     return [q1, q2, q3]
 
-q1, q2, q3 = ik(1e-2, 1e-2, deg2rad(-120))
+q1, q2, q3 = ik(40e-2, 1e-2, deg2rad(-90))
 
 #simulation stuff
 client = RemoteAPIClient()
@@ -43,7 +50,7 @@ sim.setJointTargetPosition(j2, q2 + pi/2)
 sim.setJointTargetPosition(j3, q3)
 
 
-while (t := sim.getSimulationTime()) < 50:
+while (t := sim.getSimulationTime()) < 20:
   
     sim.step()
 sim.stopSimulation()
